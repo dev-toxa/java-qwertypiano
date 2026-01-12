@@ -112,10 +112,10 @@ public class Main extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				int keyCode = e.getKeyCode();
 				// 백스페이스 감지 (토글 로직)
-				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					isSustainToggled = !isSustainToggled; // 상태 반전
-					sendSustainCommand(isSustainToggled); // MIDI 전송
-					return; // 백스페이스 자체 문자가 입력되지 않도록 리턴
+				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && e.isShiftDown()) {
+				    isSustainToggled = !isSustainToggled; // 상태 반전
+				    sendSustainCommand(isSustainToggled); // MIDI 전송
+				    return; // 이벤트 소비 (백스페이스 문자 입력 방지)
 				}
 
 				// 1. 방향키 제어 로직
