@@ -31,7 +31,7 @@ public class Main extends JFrame {
 
 	// 자동 페달 관련 변수
 	private Thread autoPedalThread = null;
-	private int pedalInterval = 600; // 4분음표 간격 (ms단위, 600ms = 약 100BPM)
+	private int pedalInterval = 100; // 4분음표 간격 (ms단위, 600ms = 약 100BPM)
 
 	private void sendSustainCommand(boolean isOn) {
 		try {
@@ -144,12 +144,12 @@ public class Main extends JFrame {
 				int keyCode = e.getKeyCode();
 
 				// Shift + Backspace: 서스테인 토글 + 자동 페달 시작/중지
-				if (keyCode == KeyEvent.VK_BACK_SPACE && e.isShiftDown()) {
-					isSustainToggled = !isSustainToggled;
-					manageAutoPedal(isSustainToggled);
-					updateStatus();
-					return;
-				}
+//				if (keyCode == KeyEvent.VK_BACK_SPACE && e.isShiftDown()) {
+//					isSustainToggled = !isSustainToggled;
+//					manageAutoPedal(isSustainToggled);
+//					updateStatus();
+//					return;
+//				}
 
 				// 방향키 제어
 				switch (keyCode) {
