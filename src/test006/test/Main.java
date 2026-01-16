@@ -24,7 +24,7 @@ public class Main extends JFrame {
 	private Receiver receiver = null;
 	private String targetPortName = "loopMIDI Port";
 	private Map<Integer, Boolean> keyStateMap = new HashMap<>();
-	
+
 	private boolean isSustainToggled = false;
 	private int octaveOffset = 0;
 	private int transposeOffset = 0;
@@ -49,18 +49,19 @@ public class Main extends JFrame {
 	// 서스테인이 켜져있을 때 주기적으로 페달을 갈아주는 스레드
 	private void manageAutoPedal(boolean start) {
 		if (start) {
-			if (autoPedalThread != null && autoPedalThread.isAlive()) return;
-			
+			if (autoPedalThread != null && autoPedalThread.isAlive())
+				return;
+
 			autoPedalThread = new Thread(() -> {
 				try {
 					while (isSustainToggled) {
 						// 1. 페달 뗌 (잔향 제거)
 						sendSustainCommand(false);
 						Thread.sleep(50); // 아주 잠깐 뗌
-						
+
 						// 2. 다시 밟음
 						sendSustainCommand(true);
-						
+
 						// 3. 지정된 시간(4분음표 등)만큼 대기
 						Thread.sleep(pedalInterval);
 					}
@@ -124,10 +125,10 @@ public class Main extends JFrame {
 
 	private void setKeyMap() {
 		keyMap = new HashMap<>();
-		String[] keyArray = { "1", "!", "2", "@", "3", "4", "$", "5", "%", "6", "^", "7", "8", "*", "9","(", "0", "q", "Q",
-				"w", "W", "e", "E", "r", "t", "T", "y", "Y", "u", "i", "I", "o", "O", "p", "P", "a", "s", "S", "d", "D",
-				"f", "g", "G", "h", "H", "j", "J", "k", "l", "L", "z", "Z", "x", "c", "C", "v", "V", "b", "B", "n", "m",
-				"M" };
+		String[] keyArray = { "1", "!", "2", "@", "3", "4", "$", "5", "%", "6", "^", "7", "8", "*", "9", "(", "0", "q",
+				"Q", "w", "W", "e", "E", "r", "t", "T", "y", "Y", "u", "i", "I", "o", "O", "p", "P", "a", "s", "S", "d",
+				"D", "f", "g", "G", "h", "H", "j", "J", "k", "l", "L", "z", "Z", "x", "c", "C", "v", "V", "b", "B", "n",
+				"m", "M" };
 
 		for (int i = 0; i < keyArray.length; i++) {
 			keyMap.put(keyArray[i], i + 36);
@@ -153,10 +154,22 @@ public class Main extends JFrame {
 
 				// 방향키 제어
 				switch (keyCode) {
-				case KeyEvent.VK_UP: octaveOffset += 12; updateStatus(); return;
-				case KeyEvent.VK_DOWN: octaveOffset -= 12; updateStatus(); return;
-				case KeyEvent.VK_RIGHT: transposeOffset += 1; updateStatus(); return;
-				case KeyEvent.VK_LEFT: transposeOffset -= 1; updateStatus(); return;
+				case KeyEvent.VK_UP:
+					octaveOffset += 12;
+					updateStatus();
+					return;
+				case KeyEvent.VK_DOWN:
+					octaveOffset -= 12;
+					updateStatus();
+					return;
+				case KeyEvent.VK_RIGHT:
+					transposeOffset += 1;
+					updateStatus();
+					return;
+				case KeyEvent.VK_LEFT:
+					transposeOffset -= 1;
+					updateStatus();
+					return;
 				}
 
 				String charKey = String.valueOf(e.getKeyChar());
@@ -173,7 +186,8 @@ public class Main extends JFrame {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) return;
+				if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
+					return;
 				String charKey = String.valueOf(e.getKeyChar());
 				Integer baseNote = keyMap.get(charKey);
 
@@ -187,8 +201,8 @@ public class Main extends JFrame {
 	}
 
 	private void updateStatus() {
-		String status = String.format("Octave: %+d | Transpose: %+d | Sustain: %s (%dms)", 
-				octaveOffset / 12, transposeOffset, isSustainToggled ? "AUTO" : "OFF", pedalInterval);
+		String status = String.format("Octave: %+d | Transpose: %+d | Sustain: %s (%dms)", octaveOffset / 12,
+				transposeOffset, isSustainToggled ? "AUTO" : "OFF", pedalInterval);
 		setTitle("MIDI Controller - " + status);
 	}
 
